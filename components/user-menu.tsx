@@ -1,24 +1,20 @@
-'use client';
+"use client"
 
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/client';
-import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { useRouter } from "next/navigation"
+import { useSupabaseSession } from "@/hooks/useSupabaseSession"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export function UserMenu() {
-  const router = useRouter();
-  const supabase = createClient();
+  const router = useRouter()
+  const { supabase } = useSupabaseSession()
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/login');
-  };
+    if (!supabase) return
+
+    await supabase.auth.signOut()
+    router.push("/login")
+  }
 
   return (
     <div className="flex items-center gap-4">
@@ -34,5 +30,6 @@ export function UserMenu() {
       </Select>
       <Button onClick={handleSignOut}>Cerrar sesión</Button>
     </div>
-  );
+  )
 }
+
